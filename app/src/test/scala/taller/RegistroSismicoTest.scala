@@ -66,43 +66,41 @@ class RegistroSismicoTest extends AnyFunSuite {
     assert(paresCercanos(registro, 5.0).forall { case (a, b) => a != b })
   }
 
-
   // Punto 1 Propio ------------------------------------------------------------
-  test("P1-1 fuertes: umbral negativo deja pasar todos los sismos"){
+
+  test("P1-1 fuertes: umbral negativo deja pasar todos los sismos") {
     assert(fuertes(registro, -1.0).length == 7)
   }
 
-  test("P1-2 fuertes: umbral exactamente igual a una magnitud es estricto"){
+  test("P1-2 fuertes: umbral exactamente igual a una magnitud es estricto") {
     assert(!fuertes(registro, 5.3).contains("Valle"))
     assert(fuertes(registro, 5.2).contains("Valle"))
   }
 
-  test("P1-3 fuertes: sobre registro vacío da lista vacía"){
+  test("P1-3 fuertes: sobre registro vacío da lista vacía") {
     assert(fuertes(vacio, 0.0) == List())
   }
 
-  test("P1-4 enRegion: región con varios sismos devuelve todas sus magnitudes en orden"){
+  test("P1-4 enRegion: región con varios sismos devuelve todas sus magnitudes en orden") {
     assert(enRegion(registro, "Choco") == List(6.0, 3.1))
   }
 
-  test("P1-5 enRegion: distingue mayúsculas/minúsculas(no hay 'valle')"){
+  test("P1-5 enRegion: distingue mayúsculas/minúsculas (no hay 'valle')") {
     assert(enRegion(registro, "valle") == List())
   }
 
-  test("P1-6 paresCercanos: dif = 0.0 solo empareja magnitudes idénticas"){
+  test("P1-6 paresCercanos: dif = 0.0 solo empareja magnitudes idénticas") {
     assert(paresCercanos(registro, 0.0) == List())
   }
 
-  test("P1-7 paresCercanos: umbral grande empareja todas las regiones"){
+  test("P1-7 paresCercanos: umbral grande empareja todas las regiones") {
     assert(paresCercanos(registro, 100.0).length == 3)
   }
 
-  test("P1-8 paresCercanos: una sola región no produce parejas"){
-    val soloValle = List(Sismo(Fecha(2025, 1), "Valle", 4.0,10))
-    assert(paresCercanos(soloValle, 10.0)==List())
+  test("P1-8 paresCercanos: una sola región no produce parejas") {
+    val soloValle = List(Sismo(Fecha(2025, 1), "Valle", 4.0, 10))
+    assert(paresCercanos(soloValle, 10.0) == List())
   }
-
-
 
   // Punto 2 -------------------------------------------------------------------
 
@@ -129,39 +127,39 @@ class RegistroSismicoTest extends AnyFunSuite {
     assert(!magnitudMaxima(registro).contains("Amazonas"))
   }
 
-
   // Punto 2 Propio ------------------------------------------------------------
-  test("P2-1 porRegion: cada sismo queda en su región, sin perder ninguno"){
+
+  test("P2-1 porRegion: cada sismo queda en su región, sin perder ninguno") {
     val m = porRegion(registro)
     assert(m("Valle").length == 3)
-    assert(m("Santander").length==2)
-    assert(m("Choco").length==2)
-    assert(m.values.flatten.toList.sortBy(x => (x.region, x.magnitud)) == registro.sortBy(x =>(x.region, x.magnitud)))
+    assert(m("Santander").length == 2)
+    assert(m("Choco").length == 2)
+    assert(m.values.flatten.toList.sortBy(x => (x.region, x.magnitud)) ==
+      registro.sortBy(x => (x.region, x.magnitud)))
   }
 
-  test("P2-2 porRegion: registro de un solo sismo"){
+  test("P2-2 porRegion: registro de un solo sismo") {
     val uno = List(Sismo(Fecha(2025, 1), "Cauca", 3.5, 10))
-    assert(porRegion(uno) == Map("Cauca" ->uno))
+    assert(porRegion(uno) == Map("Cauca" -> uno))
   }
 
-  test("P2-3 conteoPorRegion: una región con tres sismos cuenta tres"){
-    assert(conteoPorRegion(registro)("Valle")==3)
+  test("P2-3 conteoPorRegion: una región con tres sismos cuenta tres") {
+    assert(conteoPorRegion(registro)("Valle") == 3)
   }
 
-  test("P2-4 conteoPorRegion: regíon con un único sismo cuenta uno"){
-    val uno = List(Sismo(Fecha(2025, 2),"Nariño", 4.1,20))
-    assert(conteoPorRegion(uno) == Map("Nariño"->1))
+  test("P2-4 conteoPorRegion: región con un único sismo cuenta uno") {
+    val uno = List(Sismo(Fecha(2025, 2), "Nariño", 4.1, 20))
+    assert(conteoPorRegion(uno) == Map("Nariño" -> 1))
   }
 
-  test("P2-5 magnitudMaxima: con una sola región de un sismo coincide con su magnitud"){
-    val uno = List(Sismo(Fecha(2025,2),"Nariño",4.1,20))
+  test("P2-5 magnitudMaxima: con una sola región de un sismo coincide con su magnitud") {
+    val uno = List(Sismo(Fecha(2025, 2), "Nariño", 4.1, 20))
     assert(magnitudMaxima(uno) == Map("Nariño" -> 4.1))
   }
 
-  test("P2-6 magnitudMaxima: el máximo no confunde con el último de la lista"){
-    assert(magnitudMaxima(registro)("Choco")==6.0)
+  test("P2-6 magnitudMaxima: el máximo no confunde con el último de la lista") {
+    assert(magnitudMaxima(registro)("Choco") == 6.0)
   }
-
 
   // Punto 3 -------------------------------------------------------------------
 
@@ -269,6 +267,7 @@ class RegistroSismicoTest extends AnyFunSuite {
   test("replicasSensibles: el mínimo es estricto") {
     assert(replicasSensibles(3.0, 3.0) == List())
   }
+
   // Punto 4 Propio ------------------------------------------------------------
 
   test("P4-1 replicas: desde 1.0 los primeros cuatro términos") {
@@ -283,8 +282,9 @@ class RegistroSismicoTest extends AnyFunSuite {
     assert(replicas(7.3).take(1000).toList.length == 1000)
   }
 
-  test("P4-4 replicasSensibles: con mínimo 0.0 se acota con take para no colgarse") {
-    val primeras = replicasSensibles(5.0, 0.0).take(5)
+  test("P4-4 replicas: con mínimo 0.0 se acota con take sobre la secuencia perezosa") {
+    // takeWhile y take sobre LazyList son perezosos; la secuencia se estanca en 0.02 y nunca baja de 0.
+    val primeras = replicas(5.0).takeWhile(_ > 0.0).take(5).toList
     assert(primeras == List(5.0, 4.0, 3.2, 2.56, 2.05))
   }
 
@@ -305,8 +305,8 @@ class RegistroSismicoTest extends AnyFunSuite {
   test("informe: el resumen de las tres regiones") {
     assert(informe(registro, 3.0) ==
       Map("Valle" -> Resumen(3, 5.3, 3),
-          "Santander" -> Resumen(2, 5.1, 3),
-          "Choco" -> Resumen(2, 6.0, 4)))
+        "Santander" -> Resumen(2, 5.1, 3),
+        "Choco" -> Resumen(2, 6.0, 4)))
   }
 
   test("informe: el registro vacío da el mapa vacío") {
@@ -327,35 +327,36 @@ class RegistroSismicoTest extends AnyFunSuite {
     assert(informe(registro, 3.0)("Choco").replicas ==
       replicasSensibles(6.0, 3.0).length)
   }
-}
-// Punto 5 Propio ------------------------------------------------------------
 
-test("P5-1 informe: con mínimo alto, cada región tiene exactamente 1 réplica (la inicial)") {
-  val m = informe(registro, 100.0)
-  assert(m.values.forall(_.replicas == 1))
-}
+  // Punto 5 Propio ------------------------------------------------------------
 
-test("P5-2 informe: región de un único sismo tiene conteo 1 y réplicas correctas") {
-  val uno = List(Sismo(Fecha(2025, 2), "Cauca", 3.2, 15))
-  assert(informe(uno, 2.5) == Map("Cauca" -> Resumen(1, 3.2, 2)))
-}
+  test("P5-1 informe: con mínimo alto, ninguna región tiene réplicas sensibles") {
+    val m = informe(registro, 100.0)
+    assert(m.values.forall(_.replicas == 0))
+  }
 
-test("P5-3 informe: el conteo de Valle es 3, independiente del mínimo") {
-  assert(informe(registro, 0.5)("Valle").sismos == 3)
-}
+  test("P5-2 informe: región de un único sismo tiene conteo 1 y réplicas correctas") {
+    val uno = List(Sismo(Fecha(2025, 2), "Cauca", 3.2, 15))
+    assert(informe(uno, 2.5) == Map("Cauca" -> Resumen(1, 3.2, 2)))
+  }
 
-test("P5-4 informe: la máxima de cada región es la de magnitudMaxima") {
-  val m = informe(registro, 2.0)
-  assert(m("Valle").maxima == 5.3)
-  assert(m("Santander").maxima == 5.1)
-  assert(m("Choco").maxima == 6.0)
-}
+  test("P5-3 informe: el conteo de Valle es 3, independiente del mínimo") {
+    assert(informe(registro, 0.5)("Valle").sismos == 3)
+  }
 
-test("P5-5 informe: con mínimo 4.0, las réplicas cambian respecto a mínimo 3.0") {
-  assert(informe(registro, 4.0)("Choco").replicas == 2)
-}
+  test("P5-4 informe: la máxima de cada región es la de magnitudMaxima") {
+    val m = informe(registro, 2.0)
+    assert(m("Valle").maxima == 5.3)
+    assert(m("Santander").maxima == 5.1)
+    assert(m("Choco").maxima == 6.0)
+  }
 
-test("P5-6 informe: registro vacío da mapa vacío con cualquier mínimo") {
-  assert(informe(vacio, 0.0) == Map())
-  assert(informe(vacio, 5.0) == Map())
+  test("P5-5 informe: con mínimo 4.0, las réplicas cambian respecto a mínimo 3.0") {
+    assert(informe(registro, 4.0)("Choco").replicas == 2)
+  }
+
+  test("P5-6 informe: registro vacío da mapa vacío con cualquier mínimo") {
+    assert(informe(vacio, 0.0) == Map())
+    assert(informe(vacio, 5.0) == Map())
+  }
 }

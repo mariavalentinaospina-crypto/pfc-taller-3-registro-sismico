@@ -3,14 +3,12 @@ package taller
 /**
  * Taller 3 — consultas sobre un registro sísmico con expresiones for, mapas y
  * secuencias perezosas.
- *
- * Complete cada función. Las firmas y los tipos no se modifican.
  */
 class RegistroSismico {
 
   type Registro = List[Sismo]
 
-  // Punto 1: consultas con expresiones for --------------------------------------
+  // Punto 1: consultas con expresiones for ------------------------------------
 
   /** Las regiones de los sismos que superan el umbral, en orden y con repetidos. */
   def fuertes(r: Registro, umbral: Double): List[String] =
@@ -41,15 +39,16 @@ class RegistroSismico {
     } yield (a, b)
   }
 
-  // Punto 2: agrupar con mapas --------------------------------------------------
+  // Punto 2: agrupar con mapas ------------------------------------------------
 
-  def porRegion(r: Registro): Map[String, List[Sismo]] = r.groupBy(_.region)
+  def porRegion(r: Registro): Map[String, List[Sismo]] =
+    r.groupBy(_.region)
 
   def conteoPorRegion(r: Registro): Map[String, Int] =
     r.groupBy(_.region).view.mapValues(_.length).toMap
 
   def magnitudMaxima(r: Registro): Map[String, Double] =
-    r.groupBy(_.region).view.mapValues(sismos => sismos.map(_.magnitud).max).toMap
+    r.groupBy(_.region).view.mapValues(_.map(_.magnitud).max).toMap
 
   // Punto 3: consultas seguras ------------------------------------------------
 
@@ -72,6 +71,7 @@ class RegistroSismico {
       val max = conteos.values.max
       Some(conteos.filter(_._2 == max).keys.min)
     }
+
   // Punto 4: réplicas perezosas -----------------------------------------------
 
   def redondear(x: Double): Double = Math.round(x * 100.0) / 100.0
@@ -84,10 +84,9 @@ class RegistroSismico {
   def replicasSensibles(magnitud: Double, minimo: Double): List[Double] =
     replicas(magnitud).takeWhile(_ > minimo).toList
 
-  // Punto 5: informe combinado --------------------------------------------------
+  // Punto 5: informe combinado ------------------------------------------------
 
   /** Conteo, magnitud máxima y réplicas esperadas del sismo más fuerte, por región. */
-  // Punto 5: informe combinado ------------------------------------------------
   def informe(r: Registro, minimo: Double): Map[String, Resumen] =
     r.groupBy(_.region).view.mapValues { sismos =>
       val max = sismos.map(_.magnitud).max

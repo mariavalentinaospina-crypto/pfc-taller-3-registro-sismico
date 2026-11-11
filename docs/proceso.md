@@ -107,10 +107,10 @@ Esta función tiene tres `for` y una función auxiliar. Se traducen así:
 
 1. $\text{regiones} = \text{List}(\text{"Valle"}, \text{"Santander"}, \text{"Choco"})$.
 2. Para $(a, i) = (\text{"Valle"}, 0)$, $b$ recorre Santander y Choco:
-  - Valle y Santander: $|5.3 - 5.1| = 0.2 \leq 1.0$, así que se emite la pareja.
-  - Valle y Choco: $|5.3 - 6.0| = 0.7 \leq 1.0$, así que se emite la pareja.
+- Valle y Santander: $|5.3 - 5.1| = 0.2 \leq 1.0$, así que se emite la pareja.
+- Valle y Choco: $|5.3 - 6.0| = 0.7 \leq 1.0$, así que se emite la pareja.
 3. Para $(a, i) = (\text{"Santander"}, 1)$, $b$ solo recorre Choco:
-  - Santander y Choco: $|5.1 - 6.0| = 0.9 \leq 1.0$, así que se emite la pareja.
+- Santander y Choco: $|5.1 - 6.0| = 0.9 \leq 1.0$, así que se emite la pareja.
 4. Para $(a, i) = (\text{"Choco"}, 2)$, $b$ recorre una lista vacía y no se emite nada.
 
 **Resultado:** $\text{List}((\text{"Valle"}, \text{"Santander"}), (\text{"Valle"}, \text{"Choco"}), (\text{"Santander"}, \text{"Choco"}))$.
@@ -258,10 +258,10 @@ def replicasSensibles(magnitud: Double, minimo: Double): List[Double] =
 
 1. `replicas(5.0)` es la secuencia perezosa $5.0, 4.0, 3.2, 2.56, \dots$
 2. `takeWhile(_ > 3.0)` va pidiendo elementos mientras cumplan la condición:
-  - $5.0 > 3.0$, entra.
-  - $4.0 > 3.0$, entra.
-  - $3.2 > 3.0$, entra.
-  - $2.56 > 3.0$ es falso, así que se detiene.
+- $5.0 > 3.0$, entra.
+- $4.0 > 3.0$, entra.
+- $3.2 > 3.0$, entra.
+- $2.56 > 3.0$ es falso, así que se detiene.
 3. `toList` pasa a una lista solo los tres elementos que entraron.
 
 **Resultado:** $\text{List}(5.0, 4.0, 3.2)$. El mínimo es estricto: con $\text{magnitud} = 3.0$ y $\text{minimo} = 3.0$ el primer elemento ya falla y el resultado es $\text{List}()$.
